@@ -7,6 +7,7 @@ import com.hamza.uber.entity.Driver;
 import com.hamza.uber.entity.RideDetail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,11 +18,29 @@ public class Uber {
     private static final double MIN_RATING_OF_DRIVER = 4.0;
 
     public static void main(String[] args) {
-        List<Driver> availableDrivers = new ArrayList<>();
+        // Create Customer Request
         CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setCarModel("sedan");
+        customerRequest.setDistance(100);
+        customerRequest.setLocation("mumbai");
+
+        // Generate Available Drivers
+        List<Driver> availableDrivers = new ArrayList<>();
+        String[] drivers = {"A", "B", "C", "D"};
+        String[] carModels = {"sedan", "hatchback", "sedan", "suv"};
+        double[] ratings = {4.0, 4.3, 4.3, 4.5};
+        int[] distanceFromCustomer = {100, 250, 100, 300};
+        String[][] preferredLocations = {{"mumbai","hyderabad", "delhi"},
+                                        {"mumbai","hyderabad", "delhi"},
+                                        {"mumbai","hyderabad", "delhi"},
+                                        {"mumbai","hyderabad", "delhi"}};
+        for (int i = 0; i < 4; i++) {
+            Driver driver = new Driver(drivers[i], carModels[i], ratings[i],
+                    distanceFromCustomer[i], Arrays.asList(preferredLocations[i]));
+            availableDrivers.add(driver);
+        }
 
         Driver driver = getDriver(availableDrivers, customerRequest);
-
         RideDetail rideDetail = getRideDetails(driver, customerRequest);
         System.out.println(rideDetail);
     }
@@ -33,6 +52,8 @@ public class Uber {
 
     public static RideDetail getRideDetails(Driver driver, CustomerRequest customerRequest) {
         RideDetail rideDetail = new RideDetail();
+        if (driver == null) return rideDetail;
+
         rideDetail.setDriver(driver);
         rideDetail.setAmount(customerRequest.getDistance() * COST_PER_KM);
         return rideDetail;
