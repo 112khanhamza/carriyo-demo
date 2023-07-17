@@ -40,8 +40,9 @@ public class Uber {
             availableDrivers.add(driver);
         }
 
-        Driver driver = getDriver(availableDrivers, customerRequest);
-        RideDetail rideDetail = getRideDetails(driver, customerRequest);
+        Uber uber = new Uber();
+        Driver driver = uber.getDriver(availableDrivers, customerRequest);
+        RideDetail rideDetail = uber.getRideDetails(driver, customerRequest);
         System.out.println(rideDetail);
     }
 
@@ -50,7 +51,7 @@ public class Uber {
     // step 2 : check if the rating is >= 4.0
     // step 3 : get the least distance from customer
 
-    public static RideDetail getRideDetails(Driver driver, CustomerRequest customerRequest) {
+    public RideDetail getRideDetails(Driver driver, CustomerRequest customerRequest) {
         RideDetail rideDetail = new RideDetail();
         if (driver == null) return rideDetail;
 
@@ -59,14 +60,14 @@ public class Uber {
         return rideDetail;
     }
 
-    public static Driver getDriver(List<Driver> availableDrivers, CustomerRequest customerRequest) {
+    public Driver getDriver(List<Driver> availableDrivers, CustomerRequest customerRequest) {
         List<Driver> eligibleDrivers = filterDriversByCustomerRequest(availableDrivers, customerRequest);
         Driver nearestDriver = getNearestDriver(eligibleDrivers);
 
         return nearestDriver;
     }
 
-    private static Driver getNearestDriver(List<Driver> eligibleDrivers) {
+    private Driver getNearestDriver(List<Driver> eligibleDrivers) {
         if (eligibleDrivers.size() == 0) return null;
 
         int minDriverDistance = eligibleDrivers.get(0).getDistanceFromCustomer();
@@ -82,7 +83,7 @@ public class Uber {
         return currentDriver;
     }
 
-    private static List<Driver> filterDriversByCustomerRequest(List<Driver> drivers, CustomerRequest customerRequest) {
+    private List<Driver> filterDriversByCustomerRequest(List<Driver> drivers, CustomerRequest customerRequest) {
         return drivers.stream()
                 .filter(driver -> checkCustomerChoiceOfCar(driver, customerRequest))
                 .filter(driver -> checkMinDriverRating(driver))
@@ -91,15 +92,15 @@ public class Uber {
                 ;
     }
 
-    private static boolean checkPreferredDriverLocation(Driver driver, CustomerRequest customerRequest) {
+    private boolean checkPreferredDriverLocation(Driver driver, CustomerRequest customerRequest) {
         return driver.getPreferredLocations().contains(customerRequest.getLocation());
     }
 
-    private static boolean checkMinDriverRating(Driver driver) {
+    private boolean checkMinDriverRating(Driver driver) {
         return driver.getRating() >= MIN_RATING_OF_DRIVER;
     }
 
-    private static boolean checkCustomerChoiceOfCar(Driver driver, CustomerRequest customerRequest) {
+    private boolean checkCustomerChoiceOfCar(Driver driver, CustomerRequest customerRequest) {
         return driver.getCarModel().equals(customerRequest.getCarModel());
     }
 }
