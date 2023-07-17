@@ -28,9 +28,9 @@ public class Uber {
         List<Driver> availableDrivers = new ArrayList<>();
         String[] drivers = {"A", "B", "C", "D"};
         String[] carModels = {"sedan", "hatchback", "sedan", "suv"};
-        double[] ratings = {4.0, 4.3, 4.3, 4.5};
+        double[] ratings = {4.3, 4.3, 4.0, 4.5};
         int[] distanceFromCustomer = {100, 250, 100, 300};
-        String[][] preferredLocations = {{"mumbai","hyderabad", "delhi"},
+        String[][] preferredLocations = {{"delhi","hyderabad", "delhi"},
                                         {"mumbai","hyderabad", "delhi"},
                                         {"mumbai","hyderabad", "delhi"},
                                         {"mumbai","hyderabad", "delhi"}};
