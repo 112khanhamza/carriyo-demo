@@ -70,11 +70,11 @@ public class Uber {
     private Driver getNearestDriver(List<Driver> eligibleDrivers) {
         if (eligibleDrivers.size() == 0) return null;
 
-        int minDriverDistance = eligibleDrivers.get(0).getDistanceFromCustomer();
+        int minDriverDistance = eligibleDrivers.get(0).getDistanceFromCustomerInMeters();
         Driver currentDriver = eligibleDrivers.get(0);
 
         for (int i = 1; i < eligibleDrivers.size(); i++) {
-            int currentDriverDistance = eligibleDrivers.get(i).getDistanceFromCustomer();
+            int currentDriverDistance = eligibleDrivers.get(i).getDistanceFromCustomerInMeters();
             if (currentDriverDistance < minDriverDistance) {
                 minDriverDistance = currentDriverDistance;
                 currentDriver = eligibleDrivers.get(i);

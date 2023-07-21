@@ -16,6 +16,6 @@ public class Driver {
     private String driver;
     private String carModel;
     private double rating;
-    private int distanceFromCustomer; // meters
+    private int distanceFromCustomerInMeters;
     private List<String> preferredLocations;
 }
