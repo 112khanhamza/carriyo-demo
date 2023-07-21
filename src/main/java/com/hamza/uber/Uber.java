@@ -5,9 +5,11 @@ package com.hamza.uber;
 import com.hamza.uber.entity.CustomerRequest;
 import com.hamza.uber.entity.Driver;
 import com.hamza.uber.entity.RideDetail;
+import com.hamza.uber.utils.DriverBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,26 +21,10 @@ public class Uber {
 
     public static void main(String[] args) {
         // Create Customer Request
-        CustomerRequest customerRequest = new CustomerRequest();
-        customerRequest.setCarModel("sedan");
-        customerRequest.setDistance(100);
-        customerRequest.setLocation("mumbai");
+        CustomerRequest customerRequest = new CustomerRequest("sedan", 100, "mumbai");
 
         // Generate Available Drivers
-        List<Driver> availableDrivers = new ArrayList<>();
-        String[] drivers = {"A", "B", "C", "D"};
-        String[] carModels = {"sedan", "hatchback", "sedan", "suv"};
-        double[] ratings = {4.3, 4.3, 4.0, 4.5};
-        int[] distanceFromCustomer = {100, 250, 100, 300};
-        String[][] preferredLocations = {{"delhi","hyderabad", "delhi"},
-                {"mumbai","hyderabad", "delhi"},
-                {"mumbai","hyderabad", "delhi"},
-                {"mumbai","hyderabad", "delhi"}};
-        for (int i = 0; i < 4; i++) {
-            Driver driver = new Driver(drivers[i], carModels[i], ratings[i],
-                    distanceFromCustomer[i], Arrays.asList(preferredLocations[i]));
-            availableDrivers.add(driver);
-        }
+        List<Driver> availableDrivers = DriverBuilder.generateDrivers();
 
         Uber uber = new Uber();
         Driver driver = uber.getDriver(availableDrivers, customerRequest);
@@ -61,32 +47,24 @@ public class Uber {
     }
 
     public Driver getDriver(List<Driver> availableDrivers, CustomerRequest customerRequest) {
-        List<Driver> eligibleDrivers = filterDriversByCustomerRequest(availableDrivers, customerRequest);
-        Driver nearestDriver = getNearestDriver(eligibleDrivers);
+        List<Driver> eligibleDriversByCustomerRequest = filterDriversByCustomerRequest(availableDrivers, customerRequest);
+        Driver nearestDriver = filterDrivers(eligibleDriversByCustomerRequest);
 
         return nearestDriver;
     }
 
-    private Driver getNearestDriver(List<Driver> eligibleDrivers) {
-        if (eligibleDrivers.size() == 0) return null;
-
-        int minDriverDistance = eligibleDrivers.get(0).getDistanceFromCustomerInMeters();
-        Driver currentDriver = eligibleDrivers.get(0);
-
-        for (int i = 1; i < eligibleDrivers.size(); i++) {
-            int currentDriverDistance = eligibleDrivers.get(i).getDistanceFromCustomerInMeters();
-            if (currentDriverDistance < minDriverDistance) {
-                minDriverDistance = currentDriverDistance;
-                currentDriver = eligibleDrivers.get(i);
-            }
-        }
-        return currentDriver;
+    private Driver filterDrivers(List<Driver> drivers) {
+        return drivers.stream()
+                .filter(driver -> checkMinDriverRating(driver))
+                .sorted(Comparator.comparing(Driver::getRating).reversed())
+                .min(Comparator.comparing(Driver::getDistanceFromCustomerInMeters))
+                .orElse(null)
+                ;
     }
 
     private List<Driver> filterDriversByCustomerRequest(List<Driver> drivers, CustomerRequest customerRequest) {
         return drivers.stream()
                 .filter(driver -> checkCustomerChoiceOfCar(driver, customerRequest))
-                .filter(driver -> checkMinDriverRating(driver))
                 .filter(driver -> checkPreferredDriverLocation(driver, customerRequest))
                 .collect(Collectors.toList())
                 ;
