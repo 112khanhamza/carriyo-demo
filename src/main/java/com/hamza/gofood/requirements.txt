@@ -1,0 +1,34 @@
+Delivery Charges Problem
+GoFood is an online food delivery app which delivers food in Delhi 24x7.
+
+They sell the following items in their menu:
+Item Price
+Pizza Rs 150
+Burger Rs 100
+Coke Rs 50
+Brownies Rs 60
+
+They also apply delivery charges to every order.
+
+The rules for applying the charges are below:
+Rule Charges
+Peak hour Rs 30
+Special Days Rs 50
+Night Charges Rs 20
+Normal Delivery charge Rs 20
+
+The Peak hours are from 11am-2pm and 6pm-8pm
+The Special days are: 25th Dec, 4th Nov, 9th Dec
+Night charges are applicable if the order comes after 11pm to 4am.
+Normal Delivery charges are applied when no other charges condition is present.
+
+They also apply 5% GST on all their items.
+
+Generate the bill for the order by the customer on the basis of items and delivery charges.
+
+Input:
+SpecialDay: Yes Items: Burger, coke Peak hour: No
+Night Order: Yes
+Output:
+Total Bill: 227.5
+(5 % GST of 150rs = 7.5 | Total 220 + 7.5 = 227.5)
