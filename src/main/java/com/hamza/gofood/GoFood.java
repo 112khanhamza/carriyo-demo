@@ -32,6 +32,9 @@ public class GoFood {
 
         List<String> itemsRequested = customerRequest.getItems();
         List<Item> finalItems = checkItemsInInventory(itemsRequested);
+        System.out.println(finalItems);
+        if (finalItems == null || finalItems.size() == 0) return bill;
+
         List<Rule> rules = checkRulesToApply(customerRequest);
 
         double totalOrderAmount = getTotalItemAmount(finalItems);
