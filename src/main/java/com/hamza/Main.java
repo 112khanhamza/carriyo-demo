@@ -16,17 +16,27 @@ public class Main {
         return -1;
     }
 
-    public static int duplicate(int[] arr) {
-        if (arr == null) return -1;
-
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = i+1; j < arr.length; j++) {
-                if (arr[i] == arr[j]) {
-                    return arr[i];
+    public static int duplicate(int[] nums) {
+        int i = 0;
+        while (i < nums.length) {
+            if (nums[i] != i + 1) {
+                int correctIndex = nums[i] - 1;
+                if (nums[i] != nums[correctIndex]) {
+                    swap(nums, i, correctIndex);
+                } else {
+                    return nums[i];
                 }
+            } else {
+                i++;
             }
         }
         return -1;
+    }
+
+    static void swap(int[] arr, int a, int b) {
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
     }
 
     public static int duplicateOpt(int[] arr) {
